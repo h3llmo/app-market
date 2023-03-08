@@ -105,11 +105,11 @@
                         <arg>-parameters</arg>
                     </compilerArgs>
                     <annotationProcessorPaths>
-                        <chemin>
+                        <path>
                             <groupId>org.projectlombok</groupId>
                             <artifactId>lombok</artifactId>
                             <version>1.18.24</version>
-                        </chemin>
+                        </path>
                     </annotationProcessorPaths>
                 </configuration>
             </plugin>
