@@ -2,9 +2,13 @@ package com.damosoft.app.market.pagination;
 
 import jakarta.ws.rs.DefaultValue;
 import jakarta.ws.rs.QueryParam;
+import lombok.Data;
+import lombok.ToString;
 
 import java.util.List;
 
+@Data
+@ToString
 public class QueryOptions {
     @QueryParam("sort")
     private List<String> sort;
@@ -14,34 +18,4 @@ public class QueryOptions {
     @QueryParam("size")
     @DefaultValue("20")
     private int pageSize;
-
-    public QueryOptions(List<String> sort, int page, int pageSize) {
-        this.sort = sort;
-        this.page = page;
-        this.pageSize = pageSize;
-    }
-
-    public List<String> getSort() {
-        return sort;
-    }
-
-    public void setSort(List<String> sort) {
-        this.sort = sort;
-    }
-
-    public int getPage() {
-        return page;
-    }
-
-    public void setPage(int page) {
-        this.page = page;
-    }
-
-    public int getPageSize() {
-        return pageSize;
-    }
-
-    public void setPageSize(int pageSize) {
-        this.pageSize = pageSize;
-    }
 }
