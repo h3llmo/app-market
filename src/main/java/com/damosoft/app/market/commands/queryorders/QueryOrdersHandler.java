@@ -12,23 +12,24 @@ import jakarta.ws.rs.core.Response;
 public class QueryOrdersHandler {
     public Uni<Response> queryOrders(QueryOrders query) {
         PageAndSortOptions pair = PanacheQueryHelper.get(query);
-        PaginatedResult.PaginatedResultBuilder b = PaginatedResult.builder().options(query);
+        PaginatedResult b = new PaginatedResult();
+        b.setOptions(query);
         return OrderEntity
                 .findAll()
                 .page(pair.getPage())
                 .count()
                 .onItem()
                 .transformToUni(totalCount -> {
-                    b.totalCount(totalCount);
+                    b.setTotalCount(totalCount);
                     return OrderEntity
                             .findAll(pair.getSort())
                             .page(pair.getPage())
                             .list()
                             .onItem()
                             .transform(entries -> {
-                                b.entries(entries);
-                                b.count(entries.size());
-                                return b.build().toResponse();
+                                b.setEntries(entries);
+                                b.setCount(entries.size());
+                                return b.toResponse();
                             });
                 });
     }

@@ -10,16 +10,19 @@ import jakarta.ws.rs.GET;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.core.Response;
-import lombok.AllArgsConstructor;
 
 import java.net.URI;
 
 @Path("orders")
-@AllArgsConstructor
 public class OrderResource {
     private final QueryOrdersHandler queryOrdersHandler;
 
     private final CreateOrderHandler createOrderHandler;
+
+    public OrderResource(QueryOrdersHandler queryOrdersHandler, CreateOrderHandler createOrderHandler) {
+        this.queryOrdersHandler = queryOrdersHandler;
+        this.createOrderHandler = createOrderHandler;
+    }
 
     @GET
     public Uni<Response> listAll(@BeanParam QueryOrders queryOrders) {
