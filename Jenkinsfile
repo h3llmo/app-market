@@ -9,7 +9,7 @@ pipeline {
   stages {
     stage('prepare') {
       steps {
-        sh '/media/dtech/maven-settings/settings.xml ${WORKSPACE}/settings.xml"'
+        sh 'sh "cp /media/dtech/maven-settings/settings.xml ${WORKSPACE}/settings.xml""'
       }
     }
 
