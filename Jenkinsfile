@@ -2,7 +2,7 @@ pipeline {
   agent {
     docker {
       image 'maven:3.8.3-openjdk-17'
-      args '--add-host ${NEXUS_HOST}:${NEXUS_IP}'
+      args '--add-host damosoft.internal.com:10.0.2.3'
     }
 
   }
