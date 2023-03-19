@@ -1,22 +1,19 @@
 pipeline {
-  agent {
-    docker {
-      image 'maven:3.8.3-openjdk-17'
-      args '''-v /media/dtech/maven-settings:/opt/maven -w /opt/maven
---add-host damosoft.internal.com:10.0.2.3'''
-    }
-
-  }
+  agent any
   stages {
     stage('build') {
+      agent {
+        docker {
+          image 'maven:3.8.3-openjdk-17'
+          args '''-v /media/dtech/maven-settings:/opt/maven -w /opt/maven
+--add-host damosoft.internal.com:10.0.2.3'''
+        }
+
+      }
       steps {
         sh 'sh "mvn clean package"'
       }
     }
 
-  }
-  environment {
-    NEXUS_HOST = 'damosoft.internal.com'
-    NEXUS_IP = '10.0.2.3'
   }
 }
