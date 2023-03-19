@@ -8,12 +8,6 @@ pipeline {
 
   }
   stages {
-    stage('prepare') {
-      steps {
-        sh 'sh "cp /media/dtech/maven-settings/settings.xml ${WORKSPACE}/settings.xml"'
-      }
-    }
-
     stage('build') {
       steps {
         sh 'sh "mvn clean package"'
