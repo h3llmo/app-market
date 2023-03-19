@@ -20,17 +20,15 @@ pipeline {
 
       stage('docker-build') {
         steps {
-          sh 'image = docker.build(env.APP_IMAGE + \':\' + dockerTag, "-f src/main/docker/Dockerfile.jvm --pull .")'
+          sh 'image = docker.build(\'damosoft/app-market:\' + dockerTag, "-f src/main/docker/Dockerfile.jvm --pull .")'
         }
       }
 
       stage('docker-push') {
         steps {
-          sh '''script {
-            docker.withRegistry("http://damosoft.internal.com:1100", "docker-credentials") {
-                image.push()
-            }
-        }'''
+          sh '''docker.withRegistry("http://damosoft.internal.com:1100", "docker-credentials") {
+            image.push()
+}'''
           }
         }
 
