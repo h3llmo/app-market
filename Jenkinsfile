@@ -2,7 +2,8 @@ pipeline {
   agent {
     docker {
       image 'maven:3.8.3-openjdk-17'
-      args '--add-host damosoft.internal.com:10.0.2.3'
+      args '''-v /media/dtech/maven-settings:/opt/maven -w /opt/maven
+--add-host damosoft.internal.com:10.0.2.3'''
     }
 
   }
