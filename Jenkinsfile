@@ -1,3 +1,5 @@
+def dockerTag = "0.0";
+def image;
 pipeline {
   agent any
   stages {
@@ -11,24 +13,37 @@ pipeline {
 
       }
       steps {
-        sh 'mvn clean package -s /opt/maven/settings.xml'
-        sh 'dockerTag = sh(returnStdout: true, script: \'mvn help:evaluate -Dexpression=project.version -q -DforceStdout\')'
+        sh 'mvn clean package -s /opt/maven/settings.xml'            
+        script {
+            dockerTag = sh(returnStdout: true, script: 'mvn help:evaluate -Dexpression=project.version -q -DforceStdout')
+        }
+        junit allowEmptyResults: true, testResults: '**/target/surefire-reports/*.xml'
       }
     }
 
-    stage('docker-build') {
+    stage('Docker Build') {
       steps {
-        sh 'image = docker.build(\'damosoft/app-market:\' + dockerTag, "-f src/main/docker/Dockerfile.jvm --pull .")'
-      }
-    }
-
-    stage('docker-push') {
-      steps {
-        sh '''docker.withRegistry("http://damosoft.internal.com:1100", "docker-credentials") {
-            image.push()
-}'''
+        script {
+          image = docker.build(env.APP_IMAGE + ':' + dockerTag, "-f src/main/docker/Dockerfile.jvm --pull .")
         }
       }
-
     }
+    stage('Push Registry') {
+      steps {
+        script {
+            docker.withRegistry("http://damosoft.internal.com:1100", "docker-credentials") {
+                image.push()
+            }
+        }
+      }
+    }    
   }
+  environment {
+    APP_NAME="app-market"
+    APP_IMAGE="damosoft/app-market"      
+    NEXUS_HOST="damosoft.internal.com"
+    NEXUS_IP="10.0.2.3"
+    MAVEN_IMAGE="maven:3.8.3-openjdk-17"
+    MAVEN_SETTINGS="/home/jenkins_home/.m2/settings.xml"
+  }
+}
