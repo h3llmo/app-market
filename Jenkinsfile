@@ -12,25 +12,23 @@ pipeline {
       }
       steps {
         sh 'mvn clean package -s /opt/maven/settings.xml'
-        sh '''script {
-            dockerTag = sh(returnStdout: true, script: \'mvn help:evaluate -Dexpression=project.version -q -DforceStdout\')
-        }'''
-        }
-      }
-
-      stage('docker-build') {
-        steps {
-          sh 'image = docker.build(\'damosoft/app-market:\' + dockerTag, "-f src/main/docker/Dockerfile.jvm --pull .")'
-        }
-      }
-
-      stage('docker-push') {
-        steps {
-          sh '''docker.withRegistry("http://damosoft.internal.com:1100", "docker-credentials") {
-            image.push()
-}'''
-          }
-        }
-
+        sh 'dockerTag = sh(returnStdout: true, script: \'mvn help:evaluate -Dexpression=project.version -q -DforceStdout\')'
       }
     }
+
+    stage('docker-build') {
+      steps {
+        sh 'image = docker.build(\'damosoft/app-market:\' + dockerTag, "-f src/main/docker/Dockerfile.jvm --pull .")'
+      }
+    }
+
+    stage('docker-push') {
+      steps {
+        sh '''docker.withRegistry("http://damosoft.internal.com:1100", "docker-credentials") {
+            image.push()
+}'''
+        }
+      }
+
+    }
+  }
