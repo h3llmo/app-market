@@ -11,7 +11,7 @@ pipeline {
 
       }
       steps {
-        sh 'mvn clean package -s settings.xml'
+        sh 'mvn clean package -s /opt/maven/settings.xml'
       }
     }
 
