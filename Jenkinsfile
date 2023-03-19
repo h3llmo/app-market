@@ -20,21 +20,19 @@ pipeline {
 
       stage('docker-build') {
         steps {
-          sh '''script {
-          image = docker.build(env.APP_IMAGE + \':\' + dockerTag, "-f src/main/docker/Dockerfile.jvm --pull .")
-        }'''
-          }
+          sh 'image = docker.build(env.APP_IMAGE + \':\' + dockerTag, "-f src/main/docker/Dockerfile.jvm --pull .")'
         }
+      }
 
-        stage('docker-push') {
-          steps {
-            sh '''script {
+      stage('docker-push') {
+        steps {
+          sh '''script {
             docker.withRegistry("http://damosoft.internal.com:1100", "docker-credentials") {
                 image.push()
             }
         }'''
-            }
           }
-
         }
+
       }
+    }
